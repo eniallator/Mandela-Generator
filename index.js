@@ -22,6 +22,8 @@ function hexToRGB(hex) {
   ];
 }
 
+let mandela;
+
 function generate() {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -44,7 +46,13 @@ function generate() {
     hexToRGB(paramConfig.getVal("background-colour")).map((n) => n / 255)
   );
 
-  const mandela = tf.tidy(() => {
+  const aspectRatio = canvas.width / canvas.height;
+
+  if (mandela != null) {
+    mandela.dispose();
+  }
+
+  mandela = tf.tidy(() => {
     const xCoords = tf.range(0, sideLength).tile([sideLength]).reshape(shape);
     const yCoords = xCoords.transpose().reshape(shape);
     // [..., [segmentIndex, score]]
@@ -112,14 +120,42 @@ function generate() {
       )
       .reshape(shape);
 
-    if (paramConfig.getVal("use-colours")) {
-      let pixelData = tf.zeros([sideLength, sideLength, 3]);
-      for (let i = 0; i < colours.length; i++) {
-        pixelData = pixelData.add(symmetricalSegments.equal(i).mul(colours[i]));
-      }
-      return tf.keep(pixelData);
+    let segmentsWithAspectRatio;
+
+    if (aspectRatio < 1) {
+      let wallPadding = tf.fill(
+        [Math.floor(((1 - aspectRatio) * sideLength) / 2), sideLength, 1],
+        segmentAxioms.length
+      );
+      segmentsWithAspectRatio = wallPadding.concat(
+        symmetricalSegments.concat(wallPadding, 1),
+        0
+      );
     } else {
-      const edges = symmetricalSegments
+      let floorCeilingPadding = tf.fill(
+        [sideLength, Math.floor(((aspectRatio - 1) * sideLength) / 2), 1],
+        segmentAxioms.length
+      );
+      segmentsWithAspectRatio = floorCeilingPadding.concat(
+        symmetricalSegments.concat(floorCeilingPadding, 1),
+        1
+      );
+    }
+
+    let mandela;
+    if (paramConfig.getVal("use-colours")) {
+      let pixelData = tf.zeros([
+        ...segmentsWithAspectRatio.shape.slice(0, 2),
+        3,
+      ]);
+      for (let i = 0; i < colours.length; i++) {
+        pixelData = pixelData.add(
+          segmentsWithAspectRatio.equal(i).mul(colours[i])
+        );
+      }
+      mandela = pixelData;
+    } else {
+      const edges = segmentsWithAspectRatio
         .conv2d(
           tf
             .tensor2d([
@@ -131,10 +167,13 @@ function generate() {
           1,
           1
         )
-        .notEqual(symmetricalSegments.mul(5));
+        .notEqual(segmentsWithAspectRatio.mul(5));
 
-      return tf.keep(tf.zeros(shape).where(edges, tf.ones(shape)));
+      mandela = tf
+        .zeros(segmentsWithAspectRatio.shape)
+        .where(edges, tf.ones(segmentsWithAspectRatio.shape));
     }
+    return tf.keep(mandela);
   });
 
   tf.browser.toPixels(mandela, canvas);
