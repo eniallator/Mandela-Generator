@@ -1,83 +1,52 @@
 [
     {
-        "id": "example-checkbox",
-        "label": "Example Checkbox",
+        "id": "use-colours",
+        "label": "Use colours",
         "type": "checkbox",
-        "tooltip": "Example tooltip",
-        "default": true
+        "tooltip": "Colour in the mandela or not",
+        "default": false
     },
     {
-        "id": "example-range",
-        "label": "Example Range",
-        "type": "range",
-        "default": 5,
-        "attrs": {
-            "min": 1,
-            "max": 10,
-            "step": 0.5
-        }
-    },
-    {
-        "id": "example-number",
-        "label": "Example Number",
-        "type": "number",
-        "default": 5,
-        "attrs": {
-            "min": 1,
-            "max": 10
-        }
-    },
-    {
-        "id": "example-colour",
-        "label": "Example Colour",
+        "id": "background-colour",
+        "label": "Background colour",
         "type": "color",
-        "default": "FF5A5F"
+        "default": "000000"
     },
     {
-        "id": "example-button",
-        "text": "Example Button",
-        "type": "button"
-    },
-    {
-        "id": "example-text",
-        "label": "Example Text",
-        "type": "text",
-        "default": "Hello",
+        "id": "resolution",
+        "label": "Resolution",
+        "type": "number",
+        "default": 300,
         "attrs": {
-            "placeholder": "World!"
+            "min": 50,
+            "max": 1000
         }
     },
     {
-        "id": "example-collection",
-        "label": "Example Collection",
-        "type": "collection",
-        "expandable": true,
-        "fields": [
-            {
-                "label": "Example Range Field",
-                "type": "range",
-                "initial": 2,
-                "attrs": {
-                    "min": 0,
-                    "max": 4,
-                    "step": 1
-                }
-            },
-            {
-                "label": "Example Checkbox Field",
-                "type": "checkbox",
-                "initial": false
-            }
-        ],
-        "default": [
-            [
-                4,
-                true
-            ],
-            [
-                1,
-                false
-            ]
-        ]
+        "id": "num-segments",
+        "label": "Number of segments",
+        "type": "number",
+        "default": 50,
+        "attrs": {
+            "min": 10,
+            "max": 500
+        }
+    },
+    {
+        "id": "weight-influence",
+        "label": "Weight influence",
+        "tooltip": "Controls the curvyness",
+        "type": "number",
+        "default": 0.2,
+        "attrs": {
+            "min": 0,
+            "max": 0.5,
+            "step": 0.05
+        }
+    },
+    {
+        "id": "generate",
+        "text": "Generate",
+        "type": "button"
     }
 ]
