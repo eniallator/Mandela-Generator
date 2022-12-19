@@ -30,7 +30,7 @@ function generate() {
   const shape = [sideLength, sideLength, 1];
   const segmentAxioms = [];
   const colours = [];
-  for (let i = 0; i < paramConfig.getVal("num-segments"); i++) {
+  for (let i = 0; i < paramConfig.getVal("num-axioms"); i++) {
     segmentAxioms.push({
       x: (Math.random() * sideLength) / 2,
       y: (Math.random() * sideLength) / 2,

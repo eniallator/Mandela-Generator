@@ -2,8 +2,8 @@
     {
         "id": "use-colours",
         "label": "Use colours",
-        "type": "checkbox",
         "tooltip": "Colour in the mandela or not",
+        "type": "checkbox",
         "default": false
     },
     {
@@ -15,6 +15,7 @@
     {
         "id": "resolution",
         "label": "Resolution",
+        "tooltip": "Sidelength in pixels of the mandela",
         "type": "number",
         "default": 300,
         "attrs": {
@@ -23,8 +24,9 @@
         }
     },
     {
-        "id": "num-segments",
-        "label": "Number of segments",
+        "id": "num-axioms",
+        "label": "Number of axioms",
+        "tooltip": "Corresponds to how many lines/segments there are",
         "type": "number",
         "default": 50,
         "attrs": {
