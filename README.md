@@ -1,3 +1,3 @@
-# Web-Animation-Template
+# Mandela Generator
 
-My template repository for creating web animations
+A web art thing that generates mandelas with tensorflow.
