@@ -170,8 +170,8 @@ function generate() {
         .notEqual(segmentsWithAspectRatio.mul(5));
 
       mandela = tf
-        .zeros(segmentsWithAspectRatio.shape)
-        .where(edges, tf.ones(segmentsWithAspectRatio.shape));
+        .zeros([3])
+        .where(edges, tf.tensor(colours[colours.length - 1]));
     }
     return tf.keep(mandela);
   });

@@ -10,7 +10,7 @@
         "id": "background-colour",
         "label": "Background colour",
         "type": "color",
-        "default": "000000"
+        "default": "FFFFFF"
     },
     {
         "id": "resolution",
