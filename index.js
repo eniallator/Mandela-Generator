@@ -156,6 +156,14 @@ function generate() {
       mandela = pixelData;
     } else {
       const edges = segmentsWithAspectRatio
+        .pad(
+          [
+            [1, 1],
+            [1, 1],
+            [0, 0],
+          ],
+          segmentAxioms.length
+        )
         .conv2d(
           tf
             .tensor2d([
@@ -165,7 +173,7 @@ function generate() {
             ])
             .reshape([3, 3, 1, 1]),
           1,
-          1
+          "valid"
         )
         .notEqual(segmentsWithAspectRatio.mul(5));
 
