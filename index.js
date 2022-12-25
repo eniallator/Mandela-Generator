@@ -14,7 +14,6 @@ function hexToRGB(hex) {
   const match = hex
     .toUpperCase()
     .match(/^#?([\dA-F]{2})([\dA-F]{2})([\dA-F]{2})$/);
-  if (!match) return false;
   return [
     parseInt(match[1], 16),
     parseInt(match[2], 16),
@@ -120,27 +119,18 @@ function generate() {
       )
       .reshape(shape);
 
-    let segmentsWithAspectRatio;
-
-    if (aspectRatio < 1) {
-      let wallPadding = tf.fill(
-        [Math.floor(((1 - aspectRatio) * sideLength) / 2), sideLength, 1],
-        segmentAxioms.length
-      );
-      segmentsWithAspectRatio = wallPadding.concat(
-        symmetricalSegments.concat(wallPadding, 1),
-        0
-      );
-    } else {
-      let floorCeilingPadding = tf.fill(
-        [sideLength, Math.floor(((aspectRatio - 1) * sideLength) / 2), 1],
-        segmentAxioms.length
-      );
-      segmentsWithAspectRatio = floorCeilingPadding.concat(
-        symmetricalSegments.concat(floorCeilingPadding, 1),
-        1
-      );
-    }
+    const wallPadding =
+      aspectRatio < 1 ? Math.floor(((1 - aspectRatio) * sideLength) / 2) : 0;
+    const floorCeilingPadding =
+      aspectRatio > 1 ? Math.floor(((aspectRatio - 1) * sideLength) / 2) : 0;
+    const segmentsWithAspectRatio = symmetricalSegments.pad(
+      [
+        [wallPadding, wallPadding],
+        [floorCeilingPadding, floorCeilingPadding],
+        [0, 0],
+      ],
+      segmentAxioms.length
+    );
 
     let mandela;
     if (paramConfig.getVal("use-colours")) {
